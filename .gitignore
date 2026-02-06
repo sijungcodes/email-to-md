@@ -9,7 +9,11 @@ logs/
 # Python junk
 __pycache__/
 *.pyc
+.env
 
 # Virtual environment
 venv/
 
+# Private data
+vault/inbox/
+vault/meta/
