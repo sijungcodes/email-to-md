@@ -1,5 +1,4 @@
 import time
-import sys
 from gmail_client import (
     get_gmail_service,
     get_or_create_label,
@@ -9,7 +8,6 @@ from gmail_client import (
 from email_parser import parse_email
 from writer import write_markdown
 from config import POLL_INTERVAL
-from generate_views import generate_docs
 
 
 def main():
@@ -22,27 +20,14 @@ def main():
         messages = fetch_unprocessed_messages(service)
 
         for msg in messages:
-            msg_id = msg["id"]
-            print("Processing:", msg_id)
-
             try:
-                items = parse_email(service, msg_id)
-
-                if not items:
-                    print("No links found, skipping email.")
-                else:
-                    for item in items:
-                        write_markdown(item)
-                        print("Wrote:", item["id"])
-
-                # mark email as processed only after all items succeed
-                mark_as_processed(service, msg_id, label_id)
+                email = parse_email(service, msg["id"])
+                write_markdown(email)
+                mark_as_processed(service, msg["id"], label_id)
+                print("Processed:", email["subject"])
 
             except Exception as e:
                 print("Error processing message:", e)
-
-        if "--build" in sys.argv:
-            generate_docs()
 
         time.sleep(POLL_INTERVAL)
 
