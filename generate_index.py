@@ -102,21 +102,21 @@ def load_items():
 
 
 def render_html(items):
-    rows = []
+    entries = []
 
-    for i, item in enumerate(items, start=1):
-        rows.append(f"""
-        <tr>
-            <td class="rank">{i}.</td>
-            <td class="title">
-                <a href="{item['url']}" target="_blank">{item['title']}</a>
-                <span class="domain">({item['domain']})</span>
-                <div class="meta">
-                    {item['datetime_display']} • {item['source']} • 
-                    <a href="{item['details_path']}">details</a>
-                </div>
-            </td>
-        </tr>
+    for item in items:
+        entries.append(f"""
+        <article class="entry">
+            <h2 class="title">
+                <a href="{item['url']}" target="_blank">
+                    {item['title']}
+                </a>
+            </h2>
+            <div class="meta">
+                {item['domain']} · {item['datetime_display']} · {item['source']} · 
+                <a href="{item['details_path']}">details</a>
+            </div>
+        </article>
         """)
 
     return f"""
@@ -125,55 +125,78 @@ def render_html(items):
 <head>
 <meta charset="utf-8">
 <title>Inbox</title>
+
 <style>
 body {{
-    font-family: Verdana, Geneva, sans-serif;
-    background: #f6f6ef;
     margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #222;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
 }}
-.header {{
-    background: #ff6600;
-    padding: 6px 10px;
-    font-weight: bold;
-}}
+
 .container {{
-    padding: 10px;
-    max-width: 900px;
-    margin: auto;
+    max-width: 680px;
+    margin: 60px auto;
+    padding: 0 20px;
 }}
-.rank {{
-    width: 30px;
-    color: #828282;
-    vertical-align: top;
+
+header {{
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 40px;
 }}
+
+.entry {{
+    margin-bottom: 48px;
+}}
+
+.title {{
+    font-size: 22px;
+    font-weight: normal;
+    margin: 0 0 6px 0;
+}}
+
 .title a {{
     text-decoration: none;
-    color: black;
+    color: #000;
 }}
-.domain {{
-    color: #828282;
-    font-size: 12px;
+
+.title a:hover {{
+    text-decoration: underline;
 }}
+
 .meta {{
-    font-size: 10px;
-    color: #828282;
+    font-size: 13px;
+    color: #888;
 }}
+
 .meta a {{
-    color: #828282;
+    color: #888;
     text-decoration: none;
 }}
+
+.meta a:hover {{
+    text-decoration: underline;
+}}
 </style>
+
 </head>
 <body>
-<div class="header">Inbox</div>
 <div class="container">
-<table>
-{''.join(rows)}
-</table>
+
+<header>Inbox</header>
+
+{''.join(entries)}
+
 </div>
 </body>
 </html>
 """
+
 
 def main():
     items = load_items()
