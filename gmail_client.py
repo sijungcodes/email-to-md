@@ -54,12 +54,12 @@ def get_or_create_label(service):
 
     return label["id"]
 
+
 def fetch_unprocessed_messages(service, max_results=10):
-    query = f"from:me -label:{PROCESSED_LABEL}"
-    print("Gmail query:", query)
     response = service.users().messages().list(
         userId="me",
-        q=query,
+        labelIds=["SENT"],   # only mail in Sent
+        q=f"-label:{PROCESSED_LABEL}",  # exclude processed
         maxResults=max_results
     ).execute()
 
